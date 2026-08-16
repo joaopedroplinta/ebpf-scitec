@@ -1,0 +1,50 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  compile-c-examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verificar suporte a BTF no runner
+        run: |
+          if [ ! -e /sys/kernel/btf/vmlinux ]; then
+            echo "::error::/sys/kernel/btf/vmlinux ausente no runner -- CO-RE precisa de um kernel com CONFIG_DEBUG_INFO_BTF=y"
+            exit 1
+          fi
+
+      - name: Build da imagem dev (clang/llvm/libbpf/bpftool)
+        run: docker build -t ebpf-dev -f docker/Dockerfile.dev .
+
+      - name: Compilar os exemplos em C (01 a 05)
+        run: |
+          docker run --rm \
+            -v "$PWD":/workspace \
+            -v /sys/kernel/btf:/sys/kernel/btf:ro \
+            -w /workspace \
+            ebpf-dev \
+            bash -c '
+              set -e
+              for d in examples/0[1-5]-*; do
+                echo "=== $d ==="
+                (cd "$d" && make)
+              done
+            '
+
+  lint-python-examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checar sintaxe dos scripts Python (BCC + toy-server)
+        run: |
+          python3 -m py_compile \
+            examples/00-bcc-warmup/hello_execve.py \
+            examples/*/python/*.py \
+            docker/toy-server/server.py

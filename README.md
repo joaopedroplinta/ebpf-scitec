@@ -1,5 +1,7 @@
 # Minicurso eBPF
 
+[![build](https://github.com/joaopedroplinta/ebpf-scitec/actions/workflows/build.yml/badge.svg)](https://github.com/joaopedroplinta/ebpf-scitec/actions/workflows/build.yml)
+
 Minicurso introdutório de eBPF (Extended Berkeley Packet Filter), apresentado
 no **SciTec** por **João Pedro Plinta**, **Beatriz Regina Nahas** e
 **Rafael Correia Alves**. Cobre fundamentos teóricos (máquina virtual,
@@ -78,3 +80,10 @@ Quem preferir instalar as dependências direto no host (sem Docker) pode usar
 ✅ Material teórico, ambiente Docker e os seis exemplos progressivos
 prontos e testados. Próximos passos ficam a critério da equipe (ex: slides
 finais, ensaio da apresentação).
+
+## Licença
+
+Código (`docker/`, `examples/`, `scripts/`) sob licença MIT — ver
+[`LICENSE`](./LICENSE). O material em `docs/` (esqueleto teórico, relatório
+de extensão e slides) é conteúdo acadêmico submetido ao IFPR Campus Pinhais;
+uso fora do contexto do minicurso deve creditar os autores.
