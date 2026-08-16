@@ -1,14 +1,21 @@
 # Minicurso eBPF
 
-Minicurso introdutório de eBPF (Extended Berkeley Packet Filter), preparado para
-apresentação em equipe. Cobre fundamentos teóricos (máquina virtual, verifier,
-JIT, CO-RE, hooks) e uma prática guiada que replica, em versão simplificada, o
-experimento do TCC que fundamenta o curso: um coletor eBPF observando tráfego
-TCP de uma aplicação rodando em container Docker, sem passar pelo `/proc`.
+Minicurso introdutório de eBPF (Extended Berkeley Packet Filter), apresentado
+no **SciTec** por **João Pedro Plinta**, **Beatriz Regina Nahas** e
+**Rafael Correia Alves**. Cobre fundamentos teóricos (máquina virtual,
+verifier, JIT, CO-RE, hooks) e uma prática guiada que replica, em versão
+simplificada, o experimento do TCC que fundamenta o curso: um coletor eBPF
+observando tráfego TCP de uma aplicação rodando em container Docker, sem
+passar pelo `/proc`.
+
+Atividade de extensão do curso de Bacharelado em Ciência da Computação do
+Instituto Federal do Paraná, Campus Pinhais (disciplina de Práticas de
+Extensão V, orientação do professor Guilherme Werneck de Oliveira).
 
 ## Conteúdo do repositório
 
 - [`docs/Esqueleto-CursoEbpf.md`](./docs/Esqueleto-CursoEbpf.md) — roteiro teórico completo do minicurso (introdução, história do BPF, fundamentos, hooks, comparação com `/proc`/Sysstat/Prometheus, e o passo a passo do programa prático).
+- [`docs/Relatorio_de_Extensao_de_Praticas_5.pdf`](./docs/Relatorio_de_Extensao_de_Praticas_5.pdf) — relatório de atividades de extensão entregue à disciplina, com o mesmo conteúdo teórico do esqueleto mais delimitação do problema, justificativa, objetivo e metodologia do minicurso.
 - [`docs/SciTec-eBPF.pdf`](./docs/SciTec-eBPF.pdf) — slides de apoio.
 
 Estrutura do repositório:
