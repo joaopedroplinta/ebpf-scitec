@@ -8,14 +8,15 @@ TCP de uma aplicação rodando em container Docker, sem passar pelo `/proc`.
 
 ## Conteúdo do repositório
 
-- [`Esqueleto-CursoEbpf.md`](./Esqueleto-CursoEbpf.md) — roteiro teórico completo do minicurso (introdução, história do BPF, fundamentos, hooks, comparação com `/proc`/Sysstat/Prometheus, e o passo a passo do programa prático).
-- [`SciTec-eBPF.pdf`](./SciTec-eBPF.pdf) — slides de apoio.
+- [`docs/Esqueleto-CursoEbpf.md`](./docs/Esqueleto-CursoEbpf.md) — roteiro teórico completo do minicurso (introdução, história do BPF, fundamentos, hooks, comparação com `/proc`/Sysstat/Prometheus, e o passo a passo do programa prático).
+- [`docs/SciTec-eBPF.pdf`](./docs/SciTec-eBPF.pdf) — slides de apoio.
 
 O restante da estrutura (exemplos de código, Docker, scripts) está sendo
 construído incrementalmente. Estrutura planejada:
 
 ```
 minicurso-ebpf/
+├── docs/                  material teórico e slides de apoio
 ├── docker/                dev container (clang/llvm/libbpf/bpftool) + app de brinquedo para gerar tráfego TCP
 ├── examples/
 │   ├── 00-bcc-warmup/      Python + BCC — aquecimento (contador de execve)
