@@ -11,22 +11,28 @@ TCP de uma aplicação rodando em container Docker, sem passar pelo `/proc`.
 - [`docs/Esqueleto-CursoEbpf.md`](./docs/Esqueleto-CursoEbpf.md) — roteiro teórico completo do minicurso (introdução, história do BPF, fundamentos, hooks, comparação com `/proc`/Sysstat/Prometheus, e o passo a passo do programa prático).
 - [`docs/SciTec-eBPF.pdf`](./docs/SciTec-eBPF.pdf) — slides de apoio.
 
-O restante da estrutura (exemplos de código, Docker, scripts) está sendo
-construído incrementalmente. Estrutura planejada:
+Estrutura do repositório:
 
 ```
 minicurso-ebpf/
-├── docs/                  material teórico e slides de apoio
-├── docker/                dev container (clang/llvm/libbpf/bpftool) + app de brinquedo para gerar tráfego TCP
+├── docs/                    material teórico e slides de apoio
+├── docker/                  dev container (clang/llvm/libbpf/bpftool) + toy-server para gerar tráfego TCP
 ├── examples/
-│   ├── 00-bcc-warmup/      Python + BCC — aquecimento (contador de execve)
+│   ├── 00-bcc-warmup/       Python + BCC — aquecimento (contador de execve)
 │   ├── 01-hello-tracepoint/ C + libbpf/CO-RE — hello world com tracepoint
-│   ├── 02-kprobe-counter/  C + libbpf — contador simples via kprobe
-│   ├── 03-histogram-map/   C + libbpf — histograma usando BPF map
-│   ├── 04-tcp-monitor/     C + libbpf — exemplo principal: bytes por porta TCP (kprobes em tcp_sendmsg/tcp_cleanup_rbuf)
-│   └── 05-xdp-drop/        C + libbpf — extra opcional: drop de pacotes via XDP
-└── scripts/                setup de dependências, geração de vmlinux.h, checagem de ambiente
+│   ├── 02-kprobe-counter/   C + libbpf — contador simples via kprobe
+│   ├── 03-histogram-map/    C + libbpf — histograma usando BPF map
+│   ├── 04-tcp-monitor/      C + libbpf — exemplo principal: bytes por porta TCP (kprobes em tcp_sendmsg/tcp_cleanup_rbuf)
+│   └── 05-xdp-drop/         C + libbpf — extra opcional: drop de pacotes via XDP
+└── scripts/                 setup de dependências, geração de vmlinux.h, checagem de ambiente, geração de tráfego
 ```
+
+Cada pasta em `examples/` tem seu próprio `README.md` explicando o que o
+exemplo demonstra, como rodar e o que observar — a progressão foi desenhada
+para ser seguida em ordem (00 → 05), cada uma introduzindo um conceito novo
+sobre a anterior. Todos os exemplos de `01` a `05` foram compilados e
+testados em container (compilação, carregamento, verificador e leitura dos
+mapas).
 
 ## Requisitos
 
@@ -53,5 +59,6 @@ Quem preferir instalar as dependências direto no host (sem Docker) pode usar
 
 ## Status
 
-🚧 Em construção — ambiente Docker e scripts de setup prontos. Próximo passo:
-os exemplos progressivos em `examples/`.
+✅ Material teórico, ambiente Docker e os seis exemplos progressivos
+prontos e testados. Próximos passos ficam a critério da equipe (ex: slides
+finais, ensaio da apresentação).

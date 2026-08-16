@@ -23,8 +23,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         iputils-ping \
         curl \
         ca-certificates \
-    && (apt-get install -y --no-install-recommends bpftool \
-        || apt-get install -y --no-install-recommends linux-tools-generic) \
     && rm -rf /var/lib/apt/lists/*
+
+# bpftool via pacote (linux-tools-*) é um script que despacha para um binário
+# específico da versão de kernel da distro do container — quebra porque o
+# container roda sobre o kernel do host, que normalmente é outra versão.
+# O binário estático oficial do projeto não tem essa amarração.
+ARG BPFTOOL_VERSION=v7.7.0
+RUN ARCH=$(dpkg --print-architecture) \
+    && curl -sL "https://github.com/libbpf/bpftool/releases/download/${BPFTOOL_VERSION}/bpftool-${BPFTOOL_VERSION}-${ARCH}.tar.gz" \
+        | tar -xz -C /usr/local/bin bpftool \
+    && chmod +x /usr/local/bin/bpftool
 
 WORKDIR /workspace
