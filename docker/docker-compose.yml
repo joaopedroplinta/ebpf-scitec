@@ -13,6 +13,11 @@ services:
       - ..:/workspace
       - /sys/kernel/debug:/sys/kernel/debug:rw
       - /sys/kernel/btf:/sys/kernel/btf:ro
+      # headers do kernel do host, exigidos pelo BCC (examples/*/python) para
+      # compilar contra as structs reais do kernel em execução — CO-RE (usado
+      # pelos exemplos em C) não precisa disso, ver seção 3.5 do curso.
+      - /lib/modules:/lib/modules:ro
+      - /usr/src:/usr/src:ro
     working_dir: /workspace
     stdin_open: true
     tty: true

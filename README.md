@@ -18,21 +18,30 @@ minicurso-ebpf/
 ├── docs/                    material teórico e slides de apoio
 ├── docker/                  dev container (clang/llvm/libbpf/bpftool) + toy-server para gerar tráfego TCP
 ├── examples/
-│   ├── 00-bcc-warmup/       Python + BCC — aquecimento (contador de execve)
-│   ├── 01-hello-tracepoint/ C + libbpf/CO-RE — hello world com tracepoint
-│   ├── 02-kprobe-counter/   C + libbpf — contador simples via kprobe
-│   ├── 03-histogram-map/    C + libbpf — histograma usando BPF map
-│   ├── 04-tcp-monitor/      C + libbpf — exemplo principal: bytes por porta TCP (kprobes em tcp_sendmsg/tcp_cleanup_rbuf)
-│   └── 05-xdp-drop/         C + libbpf — extra opcional: drop de pacotes via XDP
+│   ├── 00-bcc-warmup/       Python + BCC — aquecimento (contador de execve via bpf_trace_printk)
+│   ├── 01-hello-tracepoint/ hello world com tracepoint — C+libbpf/CO-RE e Python+BCC
+│   ├── 02-kprobe-counter/   contador simples via kprobe — C+libbpf/CO-RE e Python+BCC
+│   ├── 03-histogram-map/    histograma usando BPF map — C+libbpf/CO-RE e Python+BCC
+│   ├── 04-tcp-monitor/      exemplo principal: bytes por porta TCP — C+libbpf/CO-RE e Python+BCC
+│   └── 05-xdp-drop/         extra opcional: drop de pacotes via XDP — C+libbpf/CO-RE e Python+BCC
 └── scripts/                 setup de dependências, geração de vmlinux.h, checagem de ambiente, geração de tráfego
 ```
 
 Cada pasta em `examples/` tem seu próprio `README.md` explicando o que o
-exemplo demonstra, como rodar e o que observar — a progressão foi desenhada
-para ser seguida em ordem (00 → 05), cada uma introduzindo um conceito novo
-sobre a anterior. Todos os exemplos de `01` a `05` foram compilados e
-testados em container (compilação, carregamento, verificador e leitura dos
-mapas).
+exemplo demonstra, como rodar e o que observar. De `01` a `05`, cada exemplo
+existe nas duas stacks do curso lado a lado: `src/` (C + libbpf/CO-RE) e
+`python/` (Python + BCC) — a progressão foi desenhada para ser seguida em
+ordem, cada uma introduzindo um conceito novo sobre a anterior.
+
+**Status de teste:** todas as versões em C (`01`–`05`) e as versões em
+Python de `00`–`03` foram compiladas/carregadas e validadas de ponta a ponta
+neste repositório. As versões em Python de `04` e `05` não puderam ser
+validadas da mesma forma no ambiente usado para montar este repositório —
+o pacote de headers do kernel deste host tem inconsistências internas que
+impedem o BCC de compilar contra `<net/sock.h>`/`<linux/bpf.h>` (detalhes no
+README de cada uma). O código segue os mesmos padrões usados por ferramentas
+BCC reais e é esperado que funcione em uma máquina com headers consistentes,
+mas vale testar antes da apresentação.
 
 ## Requisitos
 

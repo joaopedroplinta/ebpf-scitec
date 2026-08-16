@@ -1,4 +1,4 @@
-# 05 — Drop de pacotes via XDP (extra opcional)
+# 05 — Drop de pacotes via XDP (extra opcional, C+libbpf/CO-RE e Python+BCC)
 
 Demonstra o hook mais próximo do hardware (seção 4.5): o programa roda no
 driver da placa de rede, antes de o kernel alocar qualquer estrutura para o
@@ -39,11 +39,19 @@ em qualquer interface (inclusive veth) às custas de desempenho — em
 produção, numa NIC física com driver compatível, o modo nativo é a escolha
 correta (seção 4.5).
 
+Existe uma versão equivalente em Python + BCC em `python/xdp_drop.py`, com o
+mesmo parsing e as mesmas duas chaves de mapa (`porta_bloqueada`,
+`pacotes_descartados`).
+
 ## Rodando
 
 ```bash
+# C + libbpf/CO-RE
 make
 sudo ./build/xdp_drop veth-teste 9999
+
+# ou Python + BCC, equivalente
+sudo python3 python/xdp_drop.py veth-teste 9999
 ```
 
 Em outro terminal, gere tráfego UDP a partir do namespace isolado contra a
@@ -85,3 +93,15 @@ repita: agora o listener recebe o pacote normalmente.
   `struct sock` e outras estruturas com informação de conexão; aqui, no XDP,
   só existem os bytes crus do pacote — por isso não há acesso a estado de
   conexão (seção 4.5, limitação do XDP frente ao TC).
+
+> **Status de teste:** a versão em C foi compilada, carregada e validada
+> funcionalmente neste repositório (par veth cruzando dois network
+> namespaces, pacote UDP descartado e contador incrementando). A versão em
+> Python não pôde ser validada da mesma forma no ambiente usado para montar
+> este repositório pelo mesmo motivo descrito em `04-tcp-monitor/README.md`:
+> os cabeçalhos `<linux/tcp.h>`/`<linux/udp.h>` que o BCC precisa para
+> `struct tcphdr`/`struct udphdr` puxam `linux/bpf.h`, e o pacote de headers
+> deste kernel específico tem constantes inconsistentes entre si. Em uma
+> máquina com headers de kernel consistentes, o código segue o padrão comum
+> de programas XDP em BCC e é esperado que funcione sem alterações — mas
+> vale testar antes da apresentação.
