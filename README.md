@@ -34,11 +34,24 @@ minicurso-ebpf/
 - Docker
 - Privilégios de root (ou `CAP_BPF`/`CAP_SYS_ADMIN`) para carregar programas eBPF
 
-Detalhes de instalação de dependências (`clang`, `llvm`, `libbpf-dev`,
-`linux-tools-$(uname -r)`, etc.) estão na seção 6.2 do esqueleto do curso e
-serão automatizados em `scripts/setup.sh`.
+Rode `scripts/check-env.sh` para validar o ambiente automaticamente.
+
+## Início rápido (via Docker)
+
+```bash
+cd docker
+docker compose up -d --build
+docker compose exec dev bash
+```
+
+Ver [`docker/README.md`](./docker/README.md) para o fluxo completo (gerar
+`vmlinux.h`, compilar e rodar os exemplos, gerar tráfego contra o
+`toy-server`).
+
+Quem preferir instalar as dependências direto no host (sem Docker) pode usar
+`scripts/setup.sh` (equivalente à seção 6.2 do esqueleto do curso).
 
 ## Status
 
-🚧 Em construção — próximos passos: scaffolding do ambiente Docker e dos
-exemplos progressivos listados acima.
+🚧 Em construção — ambiente Docker e scripts de setup prontos. Próximo passo:
+os exemplos progressivos em `examples/`.

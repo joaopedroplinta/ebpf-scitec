@@ -1,0 +1,14 @@
+# artefatos de build eBPF (gerados por máquina, não versionar)
+*.bpf.o
+*.o
+vmlinux.h
+build/
+
+# python
+__pycache__/
+*.pyc
+
+# editor / SO
+.vscode/
+*.swp
+.DS_Store

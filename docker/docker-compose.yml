@@ -1,0 +1,24 @@
+services:
+  dev:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dev
+    container_name: ebpf-dev
+    # Privilégios amplos só porque isto é ambiente de estudo: carregar
+    # programas eBPF exige CAP_BPF/CAP_SYS_ADMIN. Num cenário de produção,
+    # prefira `cap_add` com as capabilities mínimas necessárias.
+    privileged: true
+    pid: host
+    volumes:
+      - ..:/workspace
+      - /sys/kernel/debug:/sys/kernel/debug:rw
+      - /sys/kernel/btf:/sys/kernel/btf:ro
+    working_dir: /workspace
+    stdin_open: true
+    tty: true
+
+  toy-server:
+    build: ./toy-server
+    container_name: ebpf-toy-server
+    ports:
+      - "8080:8080"
