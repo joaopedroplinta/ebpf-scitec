@@ -26,6 +26,7 @@ Estrutura do repositório:
 minicurso-ebpf/
 ├── docs/                    material teórico e slides de apoio
 ├── docker/                  dev container (clang/llvm/libbpf/bpftool) + toy-server para gerar tráfego TCP
+├── libvirt/                 alternativa via VM (libvirt/QEMU-KVM) p/ máquinas sem Docker, ex: laboratórios
 ├── examples/
 │   ├── 00-bcc-warmup/       Python + BCC — aquecimento (contador de execve via bpf_trace_printk)
 │   ├── 01-hello-tracepoint/ hello world com tracepoint — C+libbpf/CO-RE e Python+BCC
@@ -74,6 +75,11 @@ Ver [`docker/README.md`](./docker/README.md) para o fluxo completo (gerar
 
 Quem preferir instalar as dependências direto no host (sem Docker) pode usar
 `scripts/setup.sh` (equivalente à seção 6.2 do esqueleto do curso).
+
+**Máquinas onde Docker não pode ser usado** (ex: laboratórios da faculdade,
+sem permissão de root no host físico): ver [`libvirt/README.md`](./libvirt/README.md)
+-- cria uma VM via libvirt/QEMU-KVM com Docker já instalado dentro, e o
+restante do fluxo acima roda normalmente ali dentro.
 
 ## Status
 

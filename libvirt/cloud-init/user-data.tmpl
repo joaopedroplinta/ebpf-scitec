@@ -1,0 +1,54 @@
+#cloud-config
+# Template consumido por ../create-vm.sh (que substitui __VM_USER__,
+# __PASSWORD_HASH__ e __SSH_PUBKEY__ antes de gerar a ISO de seed).
+hostname: ebpf-scitec
+manage_etc_hosts: true
+
+users:
+  - name: __VM_USER__
+    groups: [sudo, docker]
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    lock_passwd: false
+    passwd: "__PASSWORD_HASH__"
+    ssh_authorized_keys:
+      - "__SSH_PUBKEY__"
+
+ssh_pwauth: true
+package_update: true
+
+packages:
+  - docker.io
+  - docker-compose-v2
+  - git
+  - curl
+
+runcmd:
+  # headers do kernel da própria VM -- ao contrário de um container Docker
+  # comum, aqui bate certinho com `uname -r` porque é o kernel que a VM
+  # realmente executa (é o que o BCC, usado pelos exemplos python/, precisa
+  # para compilar contra as structs do kernel em execução).
+  - apt-get install -y "linux-headers-$(uname -r)"
+  - systemctl enable --now docker
+  - sudo -u __VM_USER__ git clone https://github.com/joaopedroplinta/ebpf-scitec.git /home/__VM_USER__/ebpf-scitec
+  - chown -R __VM_USER__:__VM_USER__ /home/__VM_USER__/ebpf-scitec
+  - |
+    cat > /etc/motd <<'EOF'
+
+    ============================================================
+     Minicurso eBPF -- VM libvirt pronta
+    ============================================================
+     Repositorio clonado em ~/ebpf-scitec
+
+       cd ebpf-scitec/docker
+       docker compose up -d --build
+       docker compose exec dev bash
+
+     Ver ebpf-scitec/docker/README.md para o restante do fluxo
+     (gerar vmlinux.h, compilar/rodar os exemplos, gerar tráfego
+     contra o toy-server).
+    ============================================================
+
+    EOF
+
+final_message: "cloud-init finalizado em $UPTIME segundos -- Minicurso eBPF pronto."
