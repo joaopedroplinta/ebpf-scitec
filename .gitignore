@@ -4,8 +4,9 @@
 vmlinux.h
 build/
 
-# imagens/discos de VM (libvirt/create-vm.sh) -- pesados, gerados por máquina
+# imagens/discos de VM (libvirt/create-vm.sh e build-image.sh) -- pesados, gerados por máquina
 libvirt/images/
+libvirt/dist/
 
 # python
 __pycache__/
