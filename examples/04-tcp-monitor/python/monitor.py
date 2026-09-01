@@ -18,6 +18,8 @@ from time import sleep
 from bcc import BPF
 
 programa = r"""
+#include <net/sock.h>
+
 BPF_HASH(bytes_enviados, u16, u64);
 BPF_HASH(bytes_recebidos, u16, u64);
 
@@ -42,17 +44,15 @@ int trace_tcp_cleanup_rbuf(struct pt_regs *ctx, struct sock *sk, int copied) {
 
 
 def imprimir_tabela(b):
-    enviados = b["bytes_enviados"]
-    recebidos = b["bytes_recebidos"]
-    portas = {k.value for k in enviados.keys()} | {k.value for k in recebidos.keys()}
+    enviados = {k.value: v.value for k, v in b["bytes_enviados"].items()}
+    recebidos = {k.value: v.value for k, v in b["bytes_recebidos"].items()}
+    portas = set(enviados) | set(recebidos)
 
     print("\033[2J\033[H", end="")
     print(f"{'porta':<8} {'enviados(B)':>14} {'recebidos(B)':>14}")
     print("-" * 44)
     for porta in sorted(portas):
-        e = enviados.get(porta)
-        r = recebidos.get(porta)
-        print(f"{porta:<8} {(e.value if e else 0):>14} {(r.value if r else 0):>14}")
+        print(f"{porta:<8} {enviados.get(porta, 0):>14} {recebidos.get(porta, 0):>14}")
     print("\n(Ctrl+C para sair)")
     sys.stdout.flush()
 

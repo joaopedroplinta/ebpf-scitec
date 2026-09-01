@@ -48,30 +48,28 @@ sudo ./build/monitor
 sudo python3 python/monitor.py
 ```
 
-Em outro terminal, gere tráfego:
+Em outro terminal, gere tráfego **de dentro de outro container na mesma rede
+docker** (não do host, nem pelo IP do container direto do host — o
+`docker-proxy` que publica a porta introduz um salto que não aparece com a
+porta 8080 nos contadores, já que o kprobe vê a chamada de kernel de quem
+originou a conexão, não a porta publicada):
 
 ```bash
-./scripts/gen-traffic.sh localhost 8080 100
+docker compose exec dev bash
+./scripts/gen-traffic.sh toy-server 8080 100
 ```
 
 A linha da porta `8080` na tabela deve crescer nas duas colunas a cada
 requisição.
 
-> **Status de teste:** a versão em C foi compilada, carregada e validada
-> ponta a ponta neste repositório (contadores da porta 8080 crescendo
-> conforme o esperado). A versão em Python não pôde ser validada da mesma
-> forma no ambiente de desenvolvimento usado para montar este repositório:
-> o BCC precisa compilar `sk->__sk_common.skc_num` contra os cabeçalhos reais
-> do kernel (`#include <net/sock.h>`), e esse kernel específico tem um pacote
-> de headers com inconsistências internas (`ns_common.h`/`bpf.h` referenciam
-> campos e macros que não existem entre si) que impedem até programas BCC
-> simples de compilar quando tocam `net/sock.h`. Isso não afeta os exemplos
-> `01`–`03` porque eles evitam esse cabeçalho (leem argumentos escalares via
-> `PT_REGS_PARM3` em vez de dereferenciar `struct sock`). Em uma máquina com
-> headers de kernel consistentes (o caso normal, coberto por
-> `scripts/setup.sh`), a versão em Python deste exemplo segue o padrão usado
-> por ferramentas BCC reais como `tcpconnect.py`/`tcptracer.py` e é esperado
-> que funcione sem alterações — mas vale testar antes da apresentação.
+> **Status de teste:** ambas as versões foram compiladas/carregadas e
+> validadas ponta a ponta (contadores da porta 8080 crescendo conforme
+> esperado), na VM libvirt (ver `../../libvirt/README.md`). A versão em
+> Python precisava de um `#include <net/sock.h>` no programa embutido (sem
+> ele, o BCC não vê a definição completa de `struct sock` e falha ao
+> compilar) e de um pequeno ajuste em `imprimir_tabela()` (a tabela do BCC
+> espera uma chave `ctypes`, não um `int` puro, no `.get()`) — ambos já
+> corrigidos em `python/monitor.py`.
 
 ## O que observar
 

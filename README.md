@@ -43,15 +43,15 @@ existe nas duas stacks do curso lado a lado: `src/` (C + libbpf/CO-RE) e
 `python/` (Python + BCC) — a progressão foi desenhada para ser seguida em
 ordem, cada uma introduzindo um conceito novo sobre a anterior.
 
-**Status de teste:** todas as versões em C (`01`–`05`) e as versões em
-Python de `00`–`03` foram compiladas/carregadas e validadas de ponta a ponta
-neste repositório. As versões em Python de `04` e `05` não puderam ser
-validadas da mesma forma no ambiente usado para montar este repositório —
-o pacote de headers do kernel deste host tem inconsistências internas que
-impedem o BCC de compilar contra `<net/sock.h>`/`<linux/bpf.h>` (detalhes no
-README de cada uma). O código segue os mesmos padrões usados por ferramentas
-BCC reais e é esperado que funcione em uma máquina com headers consistentes,
-mas vale testar antes da apresentação.
+**Status de teste:** todas as versões em C e em Python (`00`–`05`) foram
+compiladas/carregadas e validadas de ponta a ponta — as de `04` e `05` na
+VM libvirt (ver [`libvirt/README.md`](./libvirt/README.md)), já que o
+ambiente original usado para montar este repositório tinha um pacote de
+headers do kernel inconsistente que impedia o BCC de compilar contra
+`<net/sock.h>`/`<linux/bpf.h>`. A versão em Python de `04` precisou de um
+pequeno ajuste de código (`#include` faltando e uso incorreto da API de
+tabelas do BCC — detalhes no README do exemplo); a de `05` funcionou sem
+alterações.
 
 ## Requisitos
 

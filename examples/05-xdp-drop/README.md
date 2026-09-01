@@ -94,14 +94,8 @@ repita: agora o listener recebe o pacote normalmente.
   só existem os bytes crus do pacote — por isso não há acesso a estado de
   conexão (seção 4.5, limitação do XDP frente ao TC).
 
-> **Status de teste:** a versão em C foi compilada, carregada e validada
-> funcionalmente neste repositório (par veth cruzando dois network
-> namespaces, pacote UDP descartado e contador incrementando). A versão em
-> Python não pôde ser validada da mesma forma no ambiente usado para montar
-> este repositório pelo mesmo motivo descrito em `04-tcp-monitor/README.md`:
-> os cabeçalhos `<linux/tcp.h>`/`<linux/udp.h>` que o BCC precisa para
-> `struct tcphdr`/`struct udphdr` puxam `linux/bpf.h`, e o pacote de headers
-> deste kernel específico tem constantes inconsistentes entre si. Em uma
-> máquina com headers de kernel consistentes, o código segue o padrão comum
-> de programas XDP em BCC e é esperado que funcione sem alterações — mas
-> vale testar antes da apresentação.
+> **Status de teste:** ambas as versões foram compiladas/carregadas e
+> validadas funcionalmente (par veth cruzando dois network namespaces,
+> pacote UDP descartado e contador incrementando), na VM libvirt (ver
+> `../../libvirt/README.md`). A versão em Python funcionou sem nenhuma
+> alteração no código.
