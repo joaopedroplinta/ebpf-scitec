@@ -80,7 +80,10 @@ done
 if ! LC_ALL=C virsh dominfo "$VM_NAME" | grep -q "shut off"; then
     echo "VM não desligou a tempo, forçando..." >&2
     virsh destroy "$VM_NAME" 2>/dev/null || true
-    sleep 2
+    for _ in $(seq 1 10); do
+        LC_ALL=C virsh dominfo "$VM_NAME" 2>/dev/null | grep -q "shut off" && break
+        sleep 2
+    done
 fi
 if ! LC_ALL=C virsh dominfo "$VM_NAME" | grep -q "shut off"; then
     echo "Erro: não foi possível desligar a VM antes de gerar a imagem." >&2
